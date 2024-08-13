@@ -1,7 +1,14 @@
 const menuBtn = document.getElementById("menu-btn");
 const navLinks = document.getElementById("nav-links");
 const menuBtnIcon = menuBtn.querySelector("i");
+/* Preload */
+const preloader = document.querySelector("[data-preaload]");
 
+window.addEventListener("load", function () {
+  // Cuando la página está completamente cargada
+  preloader.classList.add("loaded"); // Marcar el preloader como cargado
+  document.body.classList.add("loaded"); // Marcar el cuerpo del documento como cargado
+});
 menuBtn.addEventListener("click", (e) => {
   navLinks.classList.toggle("open");
 
