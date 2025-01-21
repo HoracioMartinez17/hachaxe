@@ -1,3 +1,21 @@
+/* Noto Sans Regular */
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/Noto_Sans/static/NotoSans-Regular.ttf') format('truetype');
+}
+
+/* Orbitron Medium */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/Orbitron/static/Orbitron-Medium.ttf') format('truetype');
+}
+
 :root {
   --primary-color: rgb(0,48,112);
   --primary-color-dark: rgb(217,2,0);

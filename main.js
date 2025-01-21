@@ -43,7 +43,7 @@ ScrollReveal().reveal(".commitment__content .section__header", {
   delay: 150,              // Retraso más corto para el header
 });
 
-ScrollReveal().reveal(".commitment__content .section__description", {
+ScrollReveal().reveal(".commitment__content .animation__fade", {
   ...scrollRevealOption,
   delay: 200,              // Retraso más corto para la descripción
 });
@@ -65,7 +65,7 @@ ScrollReveal().reveal(".build__content .section__header", {
   delay: 250,              // Retraso ajustado para el header
 });
 
-ScrollReveal().reveal(".build__content .section__description", {
+ScrollReveal().reveal(".build__content .animation__fade", {
   ...scrollRevealOption,
   delay: 300,              // Retraso ajustado para la descripción
 });
