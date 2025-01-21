@@ -4,11 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./assets/NotoAxe.svg" type="image/svg+xml" />
+
+    <!-- Preconnect para optimizar solicitudes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+    <!-- Fuentes (Noto Sans y Orbitron) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+
+    <!-- Preload de CSS crítico -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style" />
+    <link rel="preload" href="styles.css" as="style" />
+
+    <!-- CSS externo -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="canonical" href="https://hachaxe.es/" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></noscript>
     <link rel="stylesheet" href="styles.css" />
 
+    <!-- SEO y datos estructurados -->
     <title>HachAxe Málaga</title>
     <meta name="title" content="HachAxe Málaga - Lanzamiento de Hachas y Rage Room" />
     <meta name="description" content="Disfruta del lanzamiento de hachas y objetos punzantes en HachAxe Málaga. Vive la emoción de nuestro Rage Room. ¡Ven y diviértete!" />
@@ -26,34 +41,33 @@
     <!-- Structured Data -->
     <script type="application/ld+json">
       {
-          "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "name": "HachAxe Málaga",
-          "image": [
-              "https://hachaxe.es/assets/hachaxe-logo-removebg.webp"
-          ],
-          "url": "https://hachaxe.es",
-          "telephone": "+34 613814059",
-          "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "C. Maestro Lecuona, 10, Cruz de Humilladero",
-              "addressLocality": "Málaga",
-              "postalCode": "29006",
-              "addressCountry": "ES"
-          },
-          "geo": {
-              "@type": "GeoCoordinates",
-              "latitude": 36.719444,
-              "longitude": -4.420000
-          },
-          "sameAs": [
-              "https://www.instagram.com/hachaxemalaga/",
-              "https://www.facebook.com/hachaxemalaga/",
-              "https://www.tiktok.com/@hachaxemalaga"
-          ]
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "HachAxe Málaga",
+        "image": ["https://hachaxe.es/assets/hachaxe-logo-removebg.webp"],
+        "url": "https://hachaxe.es",
+        "telephone": "+34 613814059",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "C. Maestro Lecuona, 10, Cruz de Humilladero",
+          "addressLocality": "Málaga",
+          "postalCode": "29006",
+          "addressCountry": "ES"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 36.719444,
+          "longitude": -4.42
+        },
+        "sameAs": [
+          "https://www.instagram.com/hachaxemalaga/",
+          "https://www.facebook.com/hachaxemalaga/",
+          "https://www.tiktok.com/@hachaxemalaga"
+        ]
       }
-      </script>
-</head>
+    </script>
+  </head>
+
   <body>
         <!-- preloader -->
 
@@ -251,7 +265,7 @@
 
     <section class="section__container client__container" id="reseñas">
       <div class="client__image gradient__box">
-        <img src="assets/reseñas-hachaxe.webp" alt="client" />
+        <img loading="lazy" src="assets/reseñas-hachaxe.webp" alt="client" />
       </div>
       <div class="client__content">
         <h2 class="section__header">
@@ -474,14 +488,9 @@
       </div>
     </div>
     </footer>
-    <script
-    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-  ></script>
-  <script
-    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-  ></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="main.js"></script>
+      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+      <script src="https://unpkg.com/scrollreveal" defer></script>
+      <script src="main.js" defer></script>
   </body>
 </html>
