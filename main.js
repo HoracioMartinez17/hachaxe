@@ -25,57 +25,63 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("currentYear").textContent = currentYear;
 });
 const scrollRevealOption = {
-  distance: "50px",
-  origin: "bottom",
-  duration: 1000,
+  distance: "30px",        // Mantén el desplazamiento de 30px
+  origin: "bottom",        // Mantén la dirección de origen
+  duration: 200,           // Duración más rápida (anteriormente 300ms)
+  delay: 0,                // Sin retraso inicial (ajustar según el caso)
+  interval: 100,           // Intervalo de 100ms entre las animaciones
 };
-
-ScrollReveal().reveal(".header__image img", {
-  ...scrollRevealOption,
-  origin: "right",
-});
 
 
 ScrollReveal().reveal(".header__btns", {
   ...scrollRevealOption,
-  delay: 1500,
+  delay: 50,               // Retraso más corto para los botones
 });
 
 ScrollReveal().reveal(".commitment__image img", {
   ...scrollRevealOption,
   origin: "left",
+  duration: 250,           // Duración más rápida para la imagen
 });
+
 ScrollReveal().reveal(".commitment__content .section__header", {
   ...scrollRevealOption,
-  delay: 500,
+  delay: 150,              // Retraso más corto para el header
 });
+
 ScrollReveal().reveal(".commitment__content .section__description", {
   ...scrollRevealOption,
-  delay: 1000,
+  delay: 200,              // Retraso más corto para la descripción
 });
+
 ScrollReveal().reveal(".commitment__list li", {
   ...scrollRevealOption,
-  delay: 1500,
-  interval: 500,
+  delay: 400,              // Retraso ajustado para los ítems
+  interval: 200,           // Intervalo más rápido entre cada ítem
 });
 
 ScrollReveal().reveal(".build__image img", {
   ...scrollRevealOption,
   origin: "right",
+  duration: 250,           // Duración más rápida para la imagen
 });
+
 ScrollReveal().reveal(".build__content .section__header", {
   ...scrollRevealOption,
-  delay: 500,
+  delay: 250,              // Retraso ajustado para el header
 });
+
 ScrollReveal().reveal(".build__content .section__description", {
   ...scrollRevealOption,
-  delay: 1000,
+  delay: 300,              // Retraso ajustado para la descripción
 });
+
 ScrollReveal().reveal(".build__grid li", {
   ...scrollRevealOption,
-  delay: 1500,
-  interval: 500,
+  delay: 500,              // Retraso ajustado para los ítems
+  interval: 300,           // Intervalo más rápido entre cada ítem
 });
+  
 const progressCircle = document.querySelector(".autoplay-progress svg");
 const progressContent = document.querySelector(".autoplay-progress span");
 const swiper = new Swiper(".swiper", {

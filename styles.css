@@ -286,7 +286,6 @@ nav {
 .header__content h1 {
   margin-bottom: 1rem;
   font-size: 3.75rem;
-  font-weight: 600;
   font-family: var(--header-font);
   line-height: 5rem;
   color: var(--white);
@@ -496,7 +495,7 @@ object-fit: cover;
   flex-wrap: wrap;
   gap: 1rem;
   max-width: 100%; /* Cambiar de 550px a 100% para hacer que los elementos ocupen todo el ancho disponible */
-  padding: 0; /* Asegúrate de que no haya padding por defecto en la lista */
+  padding: 0;
 }
 
 .build__flex li {
@@ -766,12 +765,8 @@ a.contact-link:is(:hover, :focus) {
   display: inline-block;
   color: var(--reseñas-color);
 }
-@media (min-width: 575px) {
-	
-  /**
-   * FOOTER
-   */
-
+/* FOOTER */
+@media (min-width: 575px) and (max-width: 768px) {
   .footer-link-box {
     grid-template-columns: 1fr 1fr;
   }
@@ -781,29 +776,39 @@ a.contact-link:is(:hover, :focus) {
   }
 }
 
+@media (min-width: 768px) and (max-width: 992px) {
+  .footer-link-box {
+    grid-template-columns: 0.5fr 0.8fr 1fr;
+  }
 
-@media (min-width: 768px) {
-	  /**
-   * FOOTER
-   */
-
-   .footer-list:is(:nth-child(3), :nth-child(4)) {
+  .footer-list:is(:nth-child(3), :nth-child(4)) {
     grid-column: auto;
   }
 }
 
-
 @media (min-width: 992px) {
-	  /**
-   * FOOTER
-   */
-
-   .footer-link-box {
+  .footer-link-box {
     grid-template-columns: 0.5fr 0.8fr 1fr;
   }
 }
 
-@media (width > 540px) {
+/* HEADER */
+@media (max-width: 480px) {
+  .header__content h1 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .header__content h1 {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+}
+
+/* ESTILOS GENERALES PARA GRID */
+@media (min-width: 540px) and (max-width: 768px) {
   .discover__grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -811,8 +816,27 @@ a.contact-link:is(:hover, :focus) {
   .build__grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
 
-@media (width > 768px) {
+@media (min-width: 769px) {
+  .discover__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .build__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .build__flex li {
+    flex: 1 1 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* NAVBAR */
+@media (min-width: 968px) {
   nav {
     position: static;
     padding: 2rem 1rem;
@@ -823,9 +847,11 @@ a.contact-link:is(:hover, :focus) {
     justify-content: space-between;
     gap: 1rem;
   }
+
   .container {
     padding-inline: 5rem;
   }
+
   .nav__header {
     flex: 1;
     padding: 0;
@@ -863,10 +889,10 @@ a.contact-link:is(:hover, :focus) {
   .header__image::before {
     clip-path: polygon(10rem 0, 100% 0, 100% 100%, 0 100%);
   }
+
   .header__image img {
     margin-left: 7rem;
   }
-}
 
   .header__content :is(h1, .section__description) {
     text-align: left;
@@ -875,57 +901,39 @@ a.contact-link:is(:hover, :focus) {
   .header__btns {
     justify-content: flex-start;
   }
+}
 
-  .discover__grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .discover__card {
-    padding: 4rem 1rem;
-  }
-
-  .commitment__container {
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-  }
-
-  .commitment__content :is(.section__header, .section__description) {
-    text-align: left;
-  }
-
-  .commitment__content .section__header {
-    max-width: 500px;
-  }
-  .container__gallery{
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .build__container {
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-  }
-
-  .build__image {
-    grid-area: 1/2/2/3;
-  }
-
-  .build__content :is(.section__header, .section__description) {
-    text-align: left;
-  }
-
-  .build__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
+/* SECCIONES DE CONTENIDO (e.g., commitment, build, client) */
+@media (min-width: 768px) {
+  .commitment__container,
+  .build__container,
   .client__container {
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
   }
 
+  .commitment__content :is(.section__header, .section__description),
+  .build__content :is(.section__header, .section__description),
   .client__content :is(.section__header, .section__description) {
     text-align: left;
   }
 
+  .commitment__content .section__header,
+  .build__content .section__header {
+    max-width: 500px;
+  }
+
+  .container__gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .build__image {
+    grid-area: 1/2/2/3;
+  }
+}
+
+/* FOOTER (general) */
+@media (min-width: 768px) {
   .footer__container {
     flex-direction: row;
   }
