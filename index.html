@@ -6,7 +6,9 @@
     <link rel="shortcut icon" href="./assets/NotoAxe.svg" type="image/svg+xml" />
 
     <!-- Preconnect para optimizar solicitudes -->
-    <!-- <link rel="preconnect" href="https://cdn.jsdelivr.net" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 
     <!-- Fuentes (Noto Sans y Orbitron) -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Orbitron:wght@600&display=swap" rel="stylesheet" media="all"/>
@@ -111,8 +113,21 @@
         </div>
         <div class="header__image">
           <figure class="header__figure">
-            <img src="assets/hachaxe-logo-removebg.webp" alt="header" />
+            <picture>
+              <!-- Fuente AVIF, se cargará si el navegador lo soporta -->
+              <source srcset="assets/hachaxe-logo-removebg.avif" type="image/avif">
+              <!-- Fuente WebP, se cargará si AVIF no está soportado -->
+              <source srcset="assets/hachaxe-logo-removebg.webp" type="image/webp">
+              <!-- Fuente JPG como respaldo, en caso de que AVIF y WebP no estén soportados -->
+              <img
+                src="assets/hachaxe-logo-removebg.jpg"
+                alt="header"
+                width="300"
+                height="267"
+              />
+            </picture>
           </figure>
+        </div>
         </div>
       </div>
     </header>
@@ -263,7 +278,11 @@
 
     <section class="section__container client__container" id="reseñas">
       <div class="client__image gradient__box">
-        <img loading="lazy" src="assets/reseñas-hachaxe.webp" alt="client" />
+        <img loading="lazy"
+        src="assets/reseñas-hachaxe.webp"
+        alt="client"
+        width="300"
+        height="500"/>
       </div>
       <div class="client__content">
         <h2 class="section__header">
@@ -486,9 +505,9 @@
       </div>
     </div>
     </footer>
-      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
-      <script src="https://unpkg.com/scrollreveal" defer></script>
-      <script src="main.js" defer></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+    <script src="https://unpkg.com/scrollreveal" defer></script>
+    <script src="main.js" defer></script>
   </body>
 </html>

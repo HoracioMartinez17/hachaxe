@@ -32,12 +32,6 @@ const scrollRevealOption = {
   interval: 100,           // Intervalo de 100ms entre las animaciones
 };
 
-
-ScrollReveal().reveal(".header__btns", {
-  ...scrollRevealOption,
-  delay: 50,               // Retraso más corto para los botones
-});
-
 ScrollReveal().reveal(".commitment__image img", {
   ...scrollRevealOption,
   origin: "left",

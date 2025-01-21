@@ -96,8 +96,8 @@
   letter-spacing: 16px;
   padding-inline-start: 16px;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-stroke: 0.5px var(--eerie-black-3);
   animation: loadingText linear 2s infinite;
 }
@@ -295,6 +295,13 @@ nav {
 .header__content h1 span {
   color: var(--primary-color-dark);
 }
+
+.header__image img {
+  aspect-ratio: 10 / 9; /* Esto indica que la imagen tiene una proporción de 10:9 */
+  width: 100%;
+  height: auto;
+}
+
 
 .header__content .section__description {
   margin-bottom: 2rem;
@@ -833,7 +840,24 @@ a.contact-link:is(:hover, :focus) {
     flex: 1 1 100%;
     margin-bottom: 1rem;
   }
+
+  .header__image img {
+    width: 80vw; /* Adapta el ancho de la imagen al 80% del ancho de la pantalla */
+    height: 80vw; /* Hace que la altura sea igual al ancho, formando un cuadrado */
+    object-fit: cover; /* Asegura que la imagen se recorte bien si su contenido no encaja perfectamente */
+    margin-left: 2rem; /* Centra la imagen */
+  }
+
+  .header__image::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Cambia el triángulo a un rectángulo completo */
+    height: 80vw; /* Sincroniza el fondo con el tamaño de la imagen */
+  }
+  .client__image img {
+    width: 50vw;   /* Ocupa el 80% del ancho de la pantalla */
+    height: auto;  /* Mantiene la proporción */
+  }
 }
+
 
 /* NAVBAR */
 @media (min-width: 968px) {
@@ -891,7 +915,7 @@ a.contact-link:is(:hover, :focus) {
   }
 
   .header__image img {
-    margin-left: 7rem;
+    margin-left: 6.2rem;
   }
 
   .header__content :is(h1, .section__description) {
