@@ -4,11 +4,19 @@ const menuBtnIcon = menuBtn.querySelector("i");
 /* Preload */
 const preloader = document.querySelector("[data-preaload]");
 
-window.addEventListener("load", function () {
-  // Cuando la página está completamente cargada
-  preloader.classList.add("loaded"); // Marcar el preloader como cargado
-  document.body.classList.add("loaded"); // Marcar el cuerpo del documento como cargado
+window.addEventListener("load", () => {
+  // Asegúrate de que el preloader desaparezca correctamente
+  preloader.classList.add("loaded"); // Añade la clase 'loaded' al preloader
+  document.body.classList.add("loaded"); // Añade la clase 'loaded' al body
 });
+
+// Opcional: Elimina el preloader del DOM después de desaparecer
+setTimeout(() => {
+  if (preloader) {
+    preloader.remove();
+  }
+}, 1000); // 1 segundo después de marcarlo como 'loaded'
+
 menuBtn.addEventListener("click", (e) => {
   navLinks.classList.toggle("open");
 
@@ -25,8 +33,8 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("currentYear").textContent = currentYear;
 });
 const scrollRevealOption = {
-  distance: "30px",        // Mantén el desplazamiento de 30px
-  origin: "bottom",        // Mantén la dirección de origen
+  distance: "30px",        // Distancia de desplazamiento
+  origin: "bottom",        // Dirección de origen
   duration: 200,           // Duración más rápida (anteriormente 300ms)
   delay: 0,                // Sin retraso inicial (ajustar según el caso)
   interval: 100,           // Intervalo de 100ms entre las animaciones
@@ -54,28 +62,6 @@ ScrollReveal().reveal(".commitment__list li", {
   interval: 200,           // Intervalo más rápido entre cada ítem
 });
 
-ScrollReveal().reveal(".build__image img", {
-  ...scrollRevealOption,
-  origin: "right",
-  duration: 250,           // Duración más rápida para la imagen
-});
-
-ScrollReveal().reveal(".build__content .section__header", {
-  ...scrollRevealOption,
-  delay: 250,              // Retraso ajustado para el header
-});
-
-ScrollReveal().reveal(".build__content .animation__fade", {
-  ...scrollRevealOption,
-  delay: 300,              // Retraso ajustado para la descripción
-});
-
-ScrollReveal().reveal(".build__grid li", {
-  ...scrollRevealOption,
-  delay: 500,              // Retraso ajustado para los ítems
-  interval: 300,           // Intervalo más rápido entre cada ítem
-});
-  
 const progressCircle = document.querySelector(".autoplay-progress svg");
 const progressContent = document.querySelector(".autoplay-progress span");
 const swiper = new Swiper(".swiper", {

@@ -4,19 +4,101 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./assets/NotoAxe.svg" type="image/svg+xml" />
-
+      <!-- Canonical -->
+    <link rel="canonical" href="https://hachaxe.es/" />
     <!-- Preconnect para optimizar solicitudes -->
+    <link rel="preload"  href="/assets/hachaxe-logo-removebg.webp" as="image" fetchpriority="high">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+      <style>
+        /*-----------------------------------*\
+  #PRELOAD
+\*-----------------------------------*/
 
+.preload {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--text-dark);
+  z-index: 10;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  transition: var(--transition-2);
+}
+
+.preload > * {
+  transition: var(--transition-1);
+}
+
+.preload.loaded > * {
+  opacity: 0;
+}
+
+.preload.loaded {
+  transition-delay: 250ms;
+  transform: translateY(100%);
+}
+
+.circle {
+  width: 112px;
+  height: 112px;
+  border-radius: var(--radius-circle);
+  border: 3px solid var(--white);
+  border-block-start-color: var(--smoky-black-3);
+  margin-block-end: 45px;
+  animation: rotate360 1s linear infinite;
+}
+
+@keyframes rotate360 {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.preload .text {
+  background-image: var(--gradient-1);
+  background-size: 500%;
+  font-size: calc(2rem + 3vw);
+  font-weight: var(--weight-bold);
+  line-height: 1em;
+  text-transform: uppercase;
+  letter-spacing: 16px;
+  padding-inline-start: 16px;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.5px var(--eerie-black-3);
+  animation: loadingText linear 2s infinite;
+}
+
+@keyframes loadingText {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
+}
+      </style>
     <!-- Preload de CSS crítico -->
-    <link  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style" />
-    <link rel="preload" href="styles.css" as="style" />
+    <link rel="preload" href="styles.css" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style" />
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    <noscript>
+      <style>
+        .preload { display: none; }
+      </style>
+    </noscript>
 
     <!-- CSS externo -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"  media="print" onload="this.media='all'"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></noscript>
-    <link rel="stylesheet" href="styles.css" />
 
     <!-- SEO y datos estructurados -->
     <title>HachAxe Málaga</title>
@@ -64,18 +146,18 @@
   </head>
 
   <body>
-        <!-- preloader -->
+    <!-- preloader -->
+    <div class="preload" data-preaload>
+      <div class="circle"></div>
+      <p class="text">HachAxe</p>
+    </div>
 
-        <div class="preload" data-preaload>
-          <div class="circle"></div>
-          <p class="text">HachAxe</p>
-        </div>
     <nav>
       <div class="nav__header">
         <div class="logo nav__logo">
           <a href="#">HachAxe</a>
         </div>
-        <div class="nav__menu__btn" id="menu-btn">
+        <div class="nav__menu__btn" id="menu-btn" >
           <span><i class="ri-menu-line"></i></span>
         </div>
       </div>
@@ -96,9 +178,9 @@
         <div class="header__content">
           <h1>¡Ven y disfruta! En <span>Hachaxe</span> Málaga</h1>
           <p class="section__description">
-            Ven a Hachaxe Málaga y disfruta de nuestras experiencias. Lanzamiento de hachas,
-            lanzamiento de objetos punzantes y Habitacion antiestrés 🪓, Estamos a 2 minutos de la estacion de tren Maria Zambrano!
-            encontrarás el lugar ideal para destrozar electrodomesticos y divertirte como nunca. 💥🎯
+            Vive experiencias únicas: lanzamiento de hachas, objetos punzantes y nuestra increíble habitación antiestrés 🪓. 
+            Nos encontramos en el Polígono San Luis, el lugar perfecto para liberar adrenalina, 
+            destrozar electrodomésticos y disfrutar como nunca. 💥🎯
           </p>
           <div class="header__btns">
             <a href="https://wa.me/613814059?text=Hola%20Buenas!%20Quisiera%20más%20información" target="_blank">
@@ -107,21 +189,14 @@
           </div>
         </div>
         <div class="header__image">
-          <figure class="header__figure">
-            <picture>
-              <!-- Fuente AVIF, se cargará si el navegador lo soporta -->
-              <source srcset="assets/hachaxe-logo-removebg.avif" type="image/avif">
-              <!-- Fuente WebP, se cargará si AVIF no está soportado -->
-              <source srcset="assets/hachaxe-logo-removebg.webp" type="image/webp">
-              <!-- Fuente JPG como respaldo, en caso de que AVIF y WebP no estén soportados -->
-              <img
-                src="assets/hachaxe-logo-removebg.jpg"
-                alt="header"
-                width="300"
-                height="267"
-              />
-            </picture>
+          <figure>
+            <img
+              src="assets/hachaxe-logo-removebg.webp"
+              alt="header"
+              fetchpriority="high"
+            />
           </figure>
+        </div>
         </div>
         </div>
       </div>
@@ -164,7 +239,7 @@
   <div class="box__gallery-text">
 
     <h2 class="box__gallery-h2 section__header">¡A PARTIR DE <span>20€</span> LA HORA POR PERSONA!</h2>
-    <p class="box__gallery-p section__description animation__fade">
+    <p class="box__gallery-p section__description">
       Desde 2 personas hasta grupos de 15, ven con tus amigos, familia y disfruta de 1 o 2 horas de pura diversión 🎉. 
       Te ofrecemos un panel de lanzamiento de hachas personalizado 🪓, emocionantes torneos 🏆,
       ¡y no te pierdas nuestra sala antiestrés (Rage Room) para liberar toda tu energía desde solo <span>20€</span> la hora por persona 💥!
@@ -235,7 +310,7 @@
         <h2 class="section__header">
           DINÁMICA DE <span>JUEGO</span>
         </h2>
-        <p class="section__description animation__fade">
+        <p class="section__description">
           <span>Las sesiones pueden durar una o dos horas.</span><br> Comenzamos con una introducción a todas las medidas de seguridad, seguida de una práctica emocionante con distintos tipos de hachas y juegos interactivos.
           En la primera sesión, exploramos 4 tipos de hachas, cada una con su propia técnica. A medida que avanzamos, te desafiamos con juegos de precisión y habilidad.
           Desde hachas ligeras y rápidas hasta las más pesadas y potentes, hay una herramienta perfecta para cada estilo. Entrena tu cuerpo y mente, desata tu adrenalina y perfecciona tu lanzamiento.
@@ -254,7 +329,7 @@
             <div class="build__card gradient__box">
               <span><i class="ri-star-fill"></i></span>
               <h4>Práctica</h4>
-              <p class="section__description animation__fade">
+              <p class="section__description">
                 Nuestro maestro del hacha te guiará en el lanzamiento con destreza divina.
               </p>
             </div>
@@ -263,7 +338,7 @@
             <div class="build__card gradient__box">
               <span><i class="ri-gamepad-fill"></i></span>
               <h4>Juegos interactivos</h4>
-              <p class="section__description animation__fade">
+              <p class="section__description">
                 Participa en emocionantes mini juegos y prueba una variedad de hachas únicas.
               </p>
             </div>
@@ -454,8 +529,8 @@
         <li class="footer-list-item">
           <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
           <address class="contact-link">
-            <a href="https://maps.app.goo.gl/JRAoMHQEYBcaHa4F8" target="_blank" class="contact-link" >
-              C. Maestro Lecuona 9, paseo de los tilos, 29006 Málaga
+            <a href="https://maps.app.goo.gl/uDFd1Cb6XWndQiGC7?g_st=aw" target="_blank" class="contact-link" >
+              C/ Monterrey N21  Polígono San Luis.
             </a>
           </address>
         </li>
