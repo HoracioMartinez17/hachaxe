@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="./assets/NotoAxe.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="./assets/NotoAxe.svg" type="image/x-icon" />
       <!-- Canonical -->
     <link rel="canonical" href="https://hachaxe.es/" />
     <!-- Preconnect para optimizar solicitudes -->
@@ -11,8 +11,13 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
       <style>
         /*-----------------------------------*\
-  #PRELOAD
+  #PRELOAD MEJORADO - SIN FOUC
 \*-----------------------------------*/
+
+/* Ocultar contenido hasta que esté listo */
+body {
+  overflow: hidden;
+}
 
 .preload {
   position: fixed;
@@ -20,69 +25,112 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--text-dark);
-  z-index: 10;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  transition: var(--transition-2);
-}
-
-.preload > * {
-  transition: var(--transition-1);
-}
-
-.preload.loaded > * {
-  opacity: 0;
+  background: linear-gradient(135deg, #141414 0%, #1a1a1a 50%, #0f0f0f 100%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .preload.loaded {
-  transition-delay: 250ms;
-  transform: translateY(100%);
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
 }
 
+/* Spinner mejorado con temática de hacha */
 .circle {
-  width: 112px;
-  height: 112px;
-  border-radius: var(--radius-circle);
-  border: 3px solid var(--white);
-  border-block-start-color: var(--smoky-black-3);
-  margin-block-end: 45px;
-  animation: rotate360 1s linear infinite;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #ff6b35;
+  border-right: 4px solid #ff6b35;
+  margin-bottom: 30px;
+  animation: axe-spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  position: relative;
 }
 
-@keyframes rotate360 {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(1turn);
-  }
+.circle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 107, 53, 0.2);
+  animation: axe-spin-reverse 2s linear infinite;
 }
 
+/* Texto con efecto de escritura */
 .preload .text {
-  background-image: var(--gradient-1);
-  background-size: 500%;
-  font-size: calc(2rem + 3vw);
-  font-weight: var(--weight-bold);
-  line-height: 1em;
-  text-transform: uppercase;
-  letter-spacing: 16px;
-  padding-inline-start: 16px;
-  -webkit-text-fill-color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-stroke: 0.5px var(--eerie-black-3);
-  animation: loadingText linear 2s infinite;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+  animation: text-glow 2s ease-in-out infinite alternate;
 }
 
-@keyframes loadingText {
-  0% {
-    background-position: 100%;
+/* Animaciones */
+@keyframes axe-spin {
+  0% { 
+    transform: rotate(0deg) scale(1);
+    border-color: rgba(255, 255, 255, 0.1) #ff6b35 #ff6b35 rgba(255, 255, 255, 0.1);
   }
-  100% {
-    background-position: 0%;
+  25% { 
+    transform: rotate(90deg) scale(1.1);
+    border-color: #ff6b35 rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.1) #ff6b35;
   }
+  50% { 
+    transform: rotate(180deg) scale(1);
+    border-color: rgba(255, 255, 255, 0.1) #ff6b35 #ff6b35 rgba(255, 255, 255, 0.1);
+  }
+  75% { 
+    transform: rotate(270deg) scale(1.1);
+    border-color: #ff6b35 rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.1) #ff6b35;
+  }
+  100% { 
+    transform: rotate(360deg) scale(1);
+    border-color: rgba(255, 255, 255, 0.1) #ff6b35 #ff6b35 rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes axe-spin-reverse {
+  from { transform: translate(-50%, -50%) rotate(360deg); }
+  to { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+@keyframes text-glow {
+  0% { 
+    text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+    color: #ffffff;
+  }
+  100% { 
+    text-shadow: 0 0 30px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255, 107, 53, 0.4);
+    color: #ff6b35;
+  }
+}
+
+/* Asegurar que el contenido esté oculto hasta que el preloader termine */
+body:not(.loaded) main,
+body:not(.loaded) nav,
+body:not(.loaded) footer {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+body.loaded main,
+body.loaded nav,
+body.loaded footer {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.6s ease-out;
 }
       </style>
     <!-- Preload de CSS crítico -->
@@ -152,6 +200,14 @@
   </head>
 
   <body>
+    <script>
+      // Prevenir FOUC (Flash of Unstyled Content)
+      document.documentElement.style.visibility = 'hidden';
+      document.addEventListener('DOMContentLoaded', function() {
+        document.documentElement.style.visibility = 'visible';
+      });
+    </script>
+    
     <!-- preloader -->
     <div class="preload" data-preaload>
       <div class="circle"></div>
@@ -161,7 +217,9 @@
     <nav>
       <div class="nav__header">
         <div class="logo nav__logo">
-          <a href="#">HachAxe</a>
+          <a href="#" class="logo-text">
+            <span class="logo-part logo-left">Hach</span><span class="logo-part logo-right">Axe</span>
+          </a>
         </div>
         <div class="nav__header-right">
           <a href="https://wa.me/613814059?text=Hola%20Buenas!%20Quisiera%20más%20información" target="_blank" class="btn whatsapp-btn">

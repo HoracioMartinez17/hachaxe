@@ -295,16 +295,31 @@ body {
   font-family: var(--font-primary);
   font-size: 2rem;
   font-weight: 800;
-  background: var(--gradient-red-black);
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Texto sólido y legible con gradiente sutil */
+  color: #ffffff;
   text-decoration: none;
-  animation: logo-pulse 2s ease-in-out infinite;
-  text-shadow: var(--text-glow);
   position: relative;
   transition: var(--transition-fast);
+  /* Sombra sutil para mejor legibilidad */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 107, 53, 0.2);
+  /* Gradiente sutil opcional que funciona en navegadores modernos */
+  background: linear-gradient(135deg, #ffffff 0%, #ff6b35 50%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Animación pulsante muy sutil */
+  animation: logo-gentle-pulse 4s ease-in-out infinite;
+}
+
+/* Compatibilidad para WebKit (Safari, Chrome más antiguos) */
+.logo a {
+  -webkit-text-fill-color: transparent;
+}
+
+/* Fallback para navegadores muy antiguos */
+.no-backgroundclip .logo a {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .logo a::after {
@@ -314,11 +329,17 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--gradient-red);
+  background: linear-gradient(45deg, transparent, rgba(255, 107, 53, 0.1), transparent);
   opacity: 0;
-  filter: blur(10px);
-  animation: logo-glow 3s ease-in-out infinite;
+  /* Eliminar blur para mejor legibilidad */
+  filter: none;
+  transition: opacity 0.3s ease;
   z-index: -1;
+  pointer-events: none;
+}
+
+.logo a:hover::after {
+  opacity: 1;
 }
 
 .logo a:hover {
@@ -326,17 +347,246 @@ body {
   transform: scale(1.05);
 }
 
-/* Animaciones del logo */
+/* ===== ANIMACIÓN CORTE DE HACHA ===== */
+.logo-text {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  /* Estilos explícitos para asegurar visibilidad */
+  color: #ffffff !important;
+  font-weight: 800;
+  font-family: var(--font-primary);
+  font-size: inherit;
+  text-decoration: none;
+  /* Sombra para mejor legibilidad */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 107, 53, 0.2);
+  /* Anular cualquier background-clip del padre */
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+}
+
+.logo-part {
+  display: inline-block;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  /* Color explícito para máxima visibilidad */
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  /* Sombra individual para cada parte */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 107, 53, 0.2);
+}
+
+.logo-left {
+  transform-origin: right center;
+}
+
+.logo-right {
+  transform-origin: left center;
+}
+
+/* Efecto de corte al hover */
+.logo-text:hover .logo-left {
+  transform: translateX(-8px) rotate(-2deg);
+  animation: axe-cut-left 0.6s ease-out;
+}
+
+.logo-text:hover .logo-right {
+  transform: translateX(8px) rotate(2deg);
+  animation: axe-cut-right 0.6s ease-out;
+}
+
+/* Línea de corte mejorada */
+.logo-text::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 2px;
+  height: 0%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #ff6b35 20%,
+    #ffffff 50%,
+    #ff6b35 80%,
+    transparent 100%
+  );
+  transform: translateX(-50%);
+  transition: height 0.3s ease;
+  z-index: 10;
+  opacity: 0;
+  border-radius: 1px;
+  box-shadow: 0 0 8px #ff6b35;
+}
+
+.logo-text:hover::before {
+  height: 80%;
+  opacity: 1;
+  animation: axe-slash 0.4s ease-out;
+}
+
+@keyframes axe-cut-left {
+  0% {
+    transform: translateX(0) rotate(0);
+  }
+  30% {
+    transform: translateX(-12px) rotate(-3deg);
+  }
+  100% {
+    transform: translateX(-8px) rotate(-2deg);
+  }
+}
+
+@keyframes axe-cut-right {
+  0% {
+    transform: translateX(0) rotate(0);
+  }
+  30% {
+    transform: translateX(12px) rotate(3deg);
+  }
+  100% {
+    transform: translateX(8px) rotate(2deg);
+  }
+}
+
+@keyframes axe-slash {
+  0% {
+    height: 0%;
+    opacity: 0;
+    box-shadow: 0 0 0px #ff6b35;
+  }
+  50% {
+    height: 100%;
+    opacity: 1;
+    box-shadow: 0 0 20px #ff6b35;
+  }
+  100% {
+    height: 100%;
+    opacity: 1;
+    box-shadow: 0 0 10px #ff6b35;
+  }
+}
+
+/* ===== LOGO IMAGEN CON EFECTO CORTE ===== */
+.logo-image-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.logo-main-image {
+  transition: all 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.axe-cut-effect {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #ff6b35 20%,
+    #ffffff 50%,
+    #ff6b35 80%,
+    transparent 100%
+  );
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top center;
+  opacity: 0;
+  z-index: 2;
+  box-shadow: 0 0 15px #ff6b35;
+  transition: all 0.4s ease;
+}
+
+.logo-image-container:hover .logo-main-image {
+  animation: image-split 0.8s ease-out;
+}
+
+.logo-image-container:hover .axe-cut-effect {
+  transform: translateX(-50%) scaleY(1);
+  opacity: 0.9;
+  animation: axe-cut-appear 0.6s ease-out;
+}
+
+@keyframes image-split {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.02);
+    filter: brightness(1.1) contrast(1.1);
+  }
+  50% {
+    transform: scale(1.01) perspective(1000px) rotateY(1deg);
+    filter: brightness(1.15) contrast(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes axe-cut-appear {
+  0% {
+    transform: translateX(-50%) scaleY(0);
+    opacity: 0;
+    box-shadow: 0 0 0px #ff6b35;
+  }
+  30% {
+    transform: translateX(-50%) scaleY(0.7);
+    opacity: 1;
+    box-shadow: 0 0 25px #ff6b35;
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 0.9;
+    box-shadow: 0 0 15px #ff6b35;
+  }
+}
+
+/* Versión móvil más sutil */
+@media (max-width: 768px) {
+  .logo-text:hover .logo-left {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+
+  .logo-text:hover .logo-right {
+    transform: translateX(4px) rotate(1deg);
+  }
+
+  .axe-cut-effect {
+    width: 2px;
+    box-shadow: 0 0 10px #ff6b35;
+  }
+}
+
+/* Animaciones del logo simplificadas para mejor legibilidad */
+@keyframes logo-gentle-pulse {
+  0%,
+  100% {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 107, 53, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 107, 53, 0.3);
+    transform: scale(1.005);
+  }
+}
+
 @keyframes logo-pulse {
   0%,
   100% {
-    text-shadow: 0 0 5px rgba(220, 20, 60, 0.5), 0 0 10px rgba(220, 20, 60, 0.3),
-      0 0 15px rgba(220, 20, 60, 0.2);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 107, 53, 0.2);
+    transform: scale(1);
   }
   50% {
-    text-shadow: 0 0 10px rgba(220, 20, 60, 0.8), 0 0 20px rgba(220, 20, 60, 0.6),
-      0 0 30px rgba(220, 20, 60, 0.4);
-    transform: scale(1.02);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 107, 53, 0.3);
+    transform: scale(1.01);
   }
 }
 
@@ -344,11 +594,11 @@ body {
   0%,
   100% {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(1);
   }
   50% {
-    opacity: 0.1;
-    transform: scale(1.2);
+    opacity: 0.3;
+    transform: scale(1.05);
   }
 }
 
@@ -805,7 +1055,7 @@ nav.scrolled {
   width: 100%;
   height: 100%;
   background: var(--gradient-red);
- /* background-image: url("assets/Snapinsta.gif"); */
+  /* background-image: url("assets/Snapinsta.gif"); */
   opacity: 0;
   transition: var(--transition-fast);
 }

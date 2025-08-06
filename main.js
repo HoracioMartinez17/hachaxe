@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initParticleSystem();
   initInteractiveElements();
   initModernGallery(); // Nueva galería ultra moderna
+  initAxeLogoAnimations(); // Nueva animación de corte de hacha
 
   // Configurar Swiper si existe
   if (typeof Swiper !== "undefined") {
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ===== PRELOADER CON ANIMACIONES ÉPICAS =====
+// ===== PRELOADER ANTI-FOUC MEJORADO =====
 function initPreloader() {
   const preloader = document.querySelector("[data-preaload]");
   const circle = document.querySelector(".circle");
@@ -34,44 +35,63 @@ function initPreloader() {
 
   if (!preloader) return;
 
-  // Animación del círculo
+  // Asegurar que el body esté oculto inicialmente
+  document.body.style.overflow = "hidden";
+
+  // Animación del círculo con efecto de hacha
   if (circle) {
-    gsap.set(circle, { rotation: 0, scale: 0.5 });
+    gsap.set(circle, { rotation: 0, scale: 0.8, opacity: 0 });
     gsap.to(circle, {
       rotation: 360,
       scale: 1,
-      duration: 1.2, // Reducido de 2
+      opacity: 1,
+      duration: 1,
+      ease: "back.out(1.7)",
+    });
+  }
+
+  // Animación del texto
+  if (text) {
+    gsap.from(text, {
+      opacity: 0,
+      y: 20,
+      duration: 0.6,
+      delay: 0.2,
       ease: "power2.out",
     });
   }
 
-  // Animación del texto con efecto typewriter
-  if (text) {
-    gsap.from(text, {
-      opacity: 0,
-      y: 30, // Reducido de 50
-      duration: 0.8, // Reducido de 1
-      delay: 0.3, // Reducido de 0.5
-      ease: "power3.out",
-    });
-  }
+  // Esperar a que se carguen los recursos críticos
+  const resourcesLoaded = new Promise((resolve) => {
+    if (document.readyState === "complete") {
+      resolve();
+    } else {
+      window.addEventListener("load", resolve);
+    }
+  });
 
-  // Timeline para ocultar el preloader
-  const hidePreloader = gsap.timeline({ delay: 1.5 }); // Reducido de 3 a 1.5
-  hidePreloader
-    .to(circle, { scale: 0, rotation: 720, duration: 0.5, ease: "power2.in" }) // Más rápido
-    .to(text, { opacity: 0, y: -50, duration: 0.3 }, "-=0.2") // Más rápido
-    .to(preloader, {
-      y: "-100%",
-      duration: 0.8, // Más rápido
-      ease: "power3.inOut",
-      onComplete: () => {
-        preloader.classList.add("loaded");
-        document.body.classList.add("loaded");
-        setTimeout(() => preloader.remove(), 300); // Más rápido
-        initPageAnimations();
-      },
-    });
+  const minimumTime = new Promise((resolve) => setTimeout(resolve, 1200));
+
+  // Timeline para ocultar el preloader solo cuando todo esté listo
+  Promise.all([resourcesLoaded, minimumTime]).then(() => {
+    const hidePreloader = gsap.timeline();
+
+    hidePreloader
+      .to(circle, { scale: 0, rotation: 720, duration: 0.5, ease: "power2.in" })
+      .to(text, { opacity: 0, y: -50, duration: 0.3 }, "-=0.2")
+      .to(preloader, {
+        y: "-100%",
+        duration: 0.8,
+        ease: "power3.inOut",
+        onComplete: () => {
+          preloader.classList.add("loaded");
+          document.body.classList.add("loaded");
+          document.body.style.overflow = "";
+          setTimeout(() => preloader.remove(), 100);
+          initPageAnimations();
+        },
+      });
+  });
 }
 
 // ===== NAVEGACIÓN INTELIGENTE =====
@@ -1189,4 +1209,163 @@ function initModernGallery() {
 
   // Inicializar
   init();
+}
+
+// ===== ANIMACIONES LOGO HACHA =====
+function initAxeLogoAnimations() {
+  // Animación inicial del logo de texto al cargar
+  const logoText = document.querySelector(".logo-text");
+  const logoLeft = document.querySelector(".logo-left");
+  const logoRight = document.querySelector(".logo-right");
+  const logoImage = document.querySelector(".logo-image-container");
+
+  if (logoText && logoLeft && logoRight) {
+    // Animación de entrada espectacular al cargar la página
+    gsap.set([logoLeft, logoRight], {
+      opacity: 0,
+      y: 20,
+      scale: 0.8,
+    });
+
+    // Animación secuencial de entrada
+    const logoTl = gsap.timeline({ delay: 0.5 });
+
+    logoTl
+      .to([logoLeft, logoRight], {
+        duration: 0.8,
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        ease: "back.out(1.7)",
+        stagger: 0.1,
+      })
+      .to(
+        logoLeft,
+        {
+          duration: 0.4,
+          x: -4,
+          rotation: -1,
+          ease: "power2.out",
+        },
+        "cut"
+      )
+      .to(
+        logoRight,
+        {
+          duration: 0.4,
+          x: 4,
+          rotation: 1,
+          ease: "power2.out",
+        },
+        "cut"
+      )
+      .to(
+        [logoLeft, logoRight],
+        {
+          duration: 0.6,
+          x: 0,
+          rotation: 0,
+          ease: "elastic.out(1, 0.5)",
+        },
+        "+=0.2"
+      );
+
+    // Efecto periódico sutil cada 8 segundos
+    gsap.to(logoText, {
+      duration: 0.3,
+      scale: 1.02,
+      repeat: -1,
+      yoyo: true,
+      repeatDelay: 8,
+      ease: "power2.inOut",
+    });
+  }
+
+  // Animación del logo imagen con entrada espectacular
+  if (logoImage) {
+    const image = logoImage.querySelector(".logo-main-image");
+    const cutEffect = logoImage.querySelector(".axe-cut-effect");
+
+    if (image && cutEffect) {
+      // Estado inicial
+      gsap.set(image, { scale: 0.8, opacity: 0, rotationY: 20 });
+      gsap.set(cutEffect, { scaleY: 0, opacity: 0 });
+
+      // Animación de entrada
+      const imageTl = gsap.timeline({ delay: 1.2 });
+
+      imageTl
+        .to(image, {
+          duration: 1.2,
+          scale: 1,
+          opacity: 1,
+          rotationY: 0,
+          ease: "power3.out",
+        })
+        .to(
+          cutEffect,
+          {
+            duration: 0.6,
+            scaleY: 1,
+            opacity: 0.8,
+            ease: "power2.out",
+          },
+          "+=0.3"
+        )
+        .to(
+          cutEffect,
+          {
+            duration: 0.4,
+            opacity: 0,
+            ease: "power2.in",
+          },
+          "+=0.1"
+        )
+        .to(
+          image,
+          {
+            duration: 0.3,
+            scale: 1.02,
+            ease: "power2.out",
+          },
+          "<0.1"
+        )
+        .to(image, {
+          duration: 0.5,
+          scale: 1,
+          ease: "elastic.out(1, 0.3)",
+        });
+    }
+  }
+
+  // Animación especial cada 15 segundos con sonido visual
+  setInterval(() => {
+    if (logoText && !logoText.matches(":hover")) {
+      // Efecto de corte automático sutil
+      gsap.to(logoLeft, {
+        duration: 0.2,
+        x: -6,
+        rotation: -1.5,
+        ease: "power2.out",
+      });
+
+      gsap.to(logoRight, {
+        duration: 0.2,
+        x: 6,
+        rotation: 1.5,
+        ease: "power2.out",
+      });
+
+      // Volver a posición normal
+      gsap.to([logoLeft, logoRight], {
+        duration: 0.6,
+        x: 0,
+        rotation: 0,
+        delay: 0.2,
+        ease: "elastic.out(1, 0.4)",
+      });
+    }
+  }, 15000);
+
+  console.log("⚔️ Animaciones de logo hacha inicializadas");
 }
