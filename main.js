@@ -561,55 +561,80 @@ window.addEventListener(
   }, 250)
 );
 
-// ===== CARRUSEL DINÁMICO ULTRA MODERNO CON LAZY LOADING =====
+// ===== CARRUSEL DINÁMICO ULTRA MODERNO CON VIDEOS Y FOTOS =====
 function initModernGallery() {
-  // ===== CONFIGURACIÓN ULTRA EFICIENTE DE IMÁGENES =====
-  // 🚀 MÉTODO HÍBRIDO: Máxima velocidad + Fácil mantenimiento
+  // ===== CONFIGURACIÓN MIXTA DE MEDIOS (FOTOS + VIDEOS) =====
 
-  // Configuración base por categorías
-  const imageConfig = {
+  const mediaConfig = {
     hachas: {
       basePath: "./assets/hachas/",
-      images: [
-        { file: "hachaz-1.webp", alt: "Lanzamiento de hachas - Experiencia épica" },
-        { file: "hachaz-2.webp", alt: "Técnica profesional de lanzamiento" },
-        { file: "hachaz-5.webp", alt: "Diversión y adrenalina garantizada" },
+      media: [
+        {
+          file: "hachaz-1.webp",
+          alt: "Lanzamiento de hachas - Experiencia épica",
+          type: "image",
+        },
+        {
+          file: "hachaz-2.webp",
+          alt: "Técnica profesional de lanzamiento",
+          type: "image",
+        },
+        {
+          file: "hachaz-5.webp",
+          alt: "Diversión y adrenalina garantizada",
+          type: "image",
+        },
       ],
     },
     rage: {
       basePath: "./assets/rage/",
-      images: [{ file: "hachaz-3.webp", alt: "Rage Room - Libera todo tu estrés" }],
+      media: [
+        {
+          file: "rageRoom.jpg",
+          alt: "Rage Room - Libera todo tu estrés",
+          type: "image",
+        },
+        {
+          file: "rageRoom.mp4",
+          alt: "Rage Room - Libera todo tu estrés",
+          type: "video",
+          poster: "rageRoom-poster.png", // ← Imagen de vista previa específica
+        },
+      ],
     },
     ambiente: {
       basePath: "./assets/ambiente/",
-      images: [
-        { file: "hachaz-4.webp", alt: "Instalaciones modernas y seguras" },
-        { file: "hachaz-6.webp", alt: "Zona de espera y relajación" },
+      media: [
+        { file: "hachaz-4.webp", alt: "Instalaciones modernas y seguras", type: "image" },
+        { file: "hachaz-6.webp", alt: "Zona de espera y relajación", type: "image" },
       ],
     },
+    // Ejemplo con GIF animado como imagen
   };
 
-  // 🔥 GENERADOR AUTOMÁTICO ULTRA RÁPIDO
-  const galleryImages = {};
-  Object.entries(imageConfig).forEach(([category, config]) => {
-    galleryImages[category] = config.images.map((img) => ({
-      src: config.basePath + img.file,
-      alt: img.alt,
+  // 🔥 GENERADOR AUTOMÁTICO PARA MEDIOS MIXTOS
+  const galleryMedia = {};
+  Object.entries(mediaConfig).forEach(([category, config]) => {
+    galleryMedia[category] = config.media.map((media) => ({
+      src: config.basePath + media.file,
+      alt: media.alt,
+      type: media.type,
+      poster: media.poster ? config.basePath + media.poster : null, // ← Poster path
       category: category,
-      // Preload data para máxima velocidad
       loading: "lazy",
       sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
     }));
   });
 
-  // 🚀 FUNCIÓN HELPER PARA AGREGAR NUEVAS IMÁGENES FÁCILMENTE
-  function addImageToCategory(category, filename, altText) {
-    if (!galleryImages[category]) {
-      galleryImages[category] = [];
+  // 🚀 FUNCIÓN HELPER PARA AGREGAR NUEVOS MEDIOS FÁCILMENTE
+  function addMediaToCategory(category, filename, altText, type = "image") {
+    if (!galleryMedia[category]) {
+      galleryMedia[category] = [];
     }
-    galleryImages[category].push({
+    galleryMedia[category].push({
       src: `./assets/${category}/${filename}`,
       alt: altText,
+      type: type,
       category: category,
       loading: "lazy",
       sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
@@ -617,11 +642,20 @@ function initModernGallery() {
   }
 
   // 📊 ESTADÍSTICAS DEL SISTEMA (para debugging)
-  console.log("📸 Galería cargada:", {
-    totalImages: Object.values(galleryImages).flat().length,
-    categories: Object.keys(galleryImages),
-    imagesPerCategory: Object.fromEntries(
-      Object.entries(galleryImages).map(([cat, imgs]) => [cat, imgs.length])
+  console.log("🎬 Galería mixta cargada:", {
+    totalMedia: Object.values(galleryMedia).flat().length,
+    categories: Object.keys(galleryMedia),
+    mediaPerCategory: Object.fromEntries(
+      Object.entries(galleryMedia).map(([cat, media]) => [cat, media.length])
+    ),
+    mediaTypes: Object.fromEntries(
+      Object.entries(galleryMedia).map(([cat, media]) => [
+        cat,
+        media.reduce((acc, item) => {
+          acc[item.type] = (acc[item.type] || 0) + 1;
+          return acc;
+        }, {}),
+      ])
     ),
   });
 
@@ -644,13 +678,13 @@ function initModernGallery() {
   let touchStartY = 0;
   let autoplayInterval = null;
 
-  // Lazy loading observer
-  const imageObserver = new IntersectionObserver(
+  // Media observer actualizado
+  const mediaObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          loadImage(entry.target);
-          imageObserver.unobserve(entry.target);
+          loadMedia(entry.target);
+          mediaObserver.unobserve(entry.target);
         }
       });
     },
@@ -665,28 +699,28 @@ function initModernGallery() {
     return 3;
   }
 
-  function getAllImages() {
-    return Object.values(galleryImages).flat();
+  function getAllMedia() {
+    return Object.values(galleryMedia).flat();
   }
 
-  function getFilteredImages(filter) {
-    if (filter === "all") return getAllImages();
-    return galleryImages[filter] || [];
+  function getFilteredMedia(filter) {
+    if (filter === "all") return getAllMedia();
+    return galleryMedia[filter] || [];
   }
 
   // ===== GENERACIÓN DINÁMICA DEL CARRUSEL =====
 
-  function generateCarousel(images) {
-    currentImages = images;
-    totalSlides = Math.max(0, images.length - slidesToShow + 1);
+  function generateCarousel(media) {
+    currentImages = media;
+    totalSlides = Math.max(0, media.length - slidesToShow + 1);
 
     // Limpiar carrusel existente
     carouselTrack.innerHTML = "";
     carouselIndicators.innerHTML = "";
 
     // Generar slides
-    images.forEach((image, index) => {
-      const slide = createSlide(image, index);
+    media.forEach((mediaItem, index) => {
+      const slide = createSlide(mediaItem, index);
       carouselTrack.appendChild(slide);
     });
 
@@ -702,29 +736,57 @@ function initModernGallery() {
     updateIndicators();
     updateNavigationButtons();
 
-    // Lazy load visible images
-    lazyLoadVisibleImages();
+    // Lazy load visible media
+    lazyLoadVisibleMedia();
   }
 
-  function createSlide(image, index) {
+  function createSlide(media, index) {
     const slide = document.createElement("div");
     slide.className = "carousel-slide";
     slide.dataset.index = index;
-    slide.dataset.category = image.category;
+    slide.dataset.category = media.category;
+    slide.dataset.type = media.type;
 
-    slide.innerHTML = `
-      <div class="image-placeholder">
-        <i class="ri-image-line"></i>
-      </div>
-      <img data-src="${image.src}" alt="${image.alt}" class="lazy-image">
-      <div class="image-overlay">
-        <div class="overlay-content">
-          <i class="ri-eye-line"></i>
-          <span>Ver imagen</span>
+    if (media.type === "video") {
+      // Generar poster automáticamente o usar imagen específica
+      const posterSrc = media.poster || media.src.replace(".mp4", "-poster.jpg");
+
+      slide.innerHTML = `
+        <video data-src="${media.src}" data-poster="${posterSrc}" class="lazy-video" preload="metadata" muted loop>
+          Tu navegador no soporta videos.
+        </video>
+        <div class="video-play-icon">
+          <i class="ri-play-fill"></i>
         </div>
-      </div>
-      <div class="image-particles"></div>
-    `;
+        <div class="image-overlay">
+          <div class="overlay-content">
+            <i class="ri-play-line"></i>
+            <span>Reproducir video</span>
+          </div>
+        </div>
+        <div class="media-indicator">
+          <i class="ri-video-line"></i>
+        </div>
+        <div class="image-particles"></div>
+      `;
+    } else {
+      slide.innerHTML = `
+        <div class="image-placeholder">
+          <i class="ri-image-line"></i>
+        </div>
+        <img data-src="${media.src}" alt="${media.alt}" class="lazy-image">
+        <div class="image-overlay">
+          <div class="overlay-content">
+            <i class="ri-eye-line"></i>
+            <span>Ver imagen</span>
+          </div>
+        </div>
+        <div class="media-indicator">
+          <i class="ri-image-line"></i>
+        </div>
+        <div class="image-particles"></div>
+      `;
+    }
 
     // Crear partículas
     createParticles(slide.querySelector(".image-particles"));
@@ -743,16 +805,44 @@ function initModernGallery() {
     return indicator;
   }
 
-  // ===== LAZY LOADING INTELIGENTE =====
+  // ===== LAZY LOADING PARA MEDIOS MIXTOS =====
 
-  function lazyLoadVisibleImages() {
+  function lazyLoadVisibleMedia() {
     const visibleSlides = getVisibleSlides();
     visibleSlides.forEach((slide) => {
       const img = slide.querySelector(".lazy-image");
+      const video = slide.querySelector(".lazy-video");
+
       if (img && !img.classList.contains("loaded")) {
-        imageObserver.observe(img);
+        mediaObserver.observe(img);
+      }
+
+      if (video && !video.classList.contains("loaded")) {
+        mediaObserver.observe(video);
       }
     });
+  }
+
+  function loadMedia(element) {
+    if (element.tagName === "VIDEO") {
+      loadVideo(element);
+    } else {
+      loadImage(element);
+    }
+  }
+
+  function loadVideo(video) {
+    if (video.dataset.src) {
+      video.src = video.dataset.src;
+
+      // Aplicar poster si está disponible
+      if (video.dataset.poster) {
+        video.poster = video.dataset.poster;
+      }
+
+      video.classList.add("loaded");
+      console.log("🎬 Video cargado con poster:", video.poster);
+    }
   }
 
   function loadImage(img) {
@@ -787,7 +877,7 @@ function initModernGallery() {
     updateCarouselPosition(animated);
     updateIndicators();
     updateNavigationButtons();
-    lazyLoadVisibleImages();
+    lazyLoadVisibleMedia();
   }
 
   function nextSlide() {
@@ -845,7 +935,7 @@ function initModernGallery() {
         btn.classList.add("active");
 
         // Filter and regenerate carousel
-        const filteredImages = getFilteredImages(filter);
+        const filteredMedia = getFilteredMedia(filter);
 
         // Animación de salida
         gsap.to(carouselTrack, {
@@ -853,7 +943,7 @@ function initModernGallery() {
           y: 20,
           duration: 0.3,
           onComplete: () => {
-            generateCarousel(filteredImages);
+            generateCarousel(filteredMedia);
             // Animación de entrada
             gsap.fromTo(
               carouselTrack,
@@ -870,8 +960,11 @@ function initModernGallery() {
 
   function setupSlideEvents(slide, index) {
     const img = slide.querySelector("img");
+    const video = slide.querySelector("video");
+    const mediaElement = img || video;
     const overlay = slide.querySelector(".image-overlay");
     const particles = slide.querySelector(".image-particles");
+    const playIcon = slide.querySelector(".video-play-icon"); // ← Nuevo ícono
 
     // 📱 EFECTOS ADAPTATIVOS SEGÚN DISPOSITIVO
     const isMobile = window.innerWidth <= 768;
@@ -882,7 +975,7 @@ function initModernGallery() {
       // En móvil, efectos más sutiles
       const slideY = isMobile ? -8 : -15;
       const slideScale = isMobile ? 1.01 : 1.02;
-      const imgScale = isMobile ? 1.05 : isTablet ? 1.08 : 1.15;
+      const mediaScale = isMobile ? 1.05 : isTablet ? 1.08 : 1.15;
 
       gsap.to(slide, {
         y: slideY,
@@ -891,11 +984,34 @@ function initModernGallery() {
         ease: "power2.out",
       });
 
-      gsap.to(img, {
-        scale: imgScale,
+      gsap.to(mediaElement, {
+        scale: mediaScale,
         duration: 0.6,
         ease: "power2.out",
       });
+
+      // Auto-play video en hover (solo en desktop)
+      if (video && !isMobile) {
+        video.play().catch((err) => console.log("Video play failed:", err));
+        // Ocultar ícono de play cuando empieza la reproducción
+        if (playIcon) {
+          gsap.to(playIcon, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
+      }
+
+      // Animar ícono de play en hover
+      if (playIcon && !video?.classList.contains("playing")) {
+        gsap.to(playIcon, {
+          scale: 1.1,
+          duration: 0.3,
+          ease: "back.out(1.7)",
+        });
+      }
 
       // Solo animar partículas en desktop
       if (!isMobile) {
@@ -911,11 +1027,35 @@ function initModernGallery() {
         ease: "power2.out",
       });
 
-      gsap.to(img, {
+      gsap.to(mediaElement, {
         scale: 1,
         duration: 0.6,
         ease: "power2.out",
       });
+
+      // Pausar video cuando sale el hover
+      if (video && !isMobile) {
+        video.pause();
+        video.currentTime = 0; // Reiniciar al inicio
+        // Mostrar ícono de play de nuevo
+        if (playIcon) {
+          gsap.to(playIcon, {
+            scale: 1,
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
+      }
+
+      // Restaurar ícono de play en mouseleave
+      if (playIcon) {
+        gsap.to(playIcon, {
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      }
     });
 
     // Click para lightbox
@@ -1005,16 +1145,31 @@ function initModernGallery() {
   // ===== LIGHTBOX (adaptado para carrusel) =====
 
   function openLightbox(index) {
-    const image = currentImages[index];
-    if (!image) return;
+    const mediaItem = currentImages[index];
+    if (!mediaItem) return;
 
     const modalImg = lightboxModal.querySelector(".modal-image");
+    const modalVideo = lightboxModal.querySelector(".modal-video");
     const modalTitle = lightboxModal.querySelector(".modal-title");
     const currentSpan = lightboxModal.querySelector(".current-image");
     const totalSpan = lightboxModal.querySelector(".total-images");
 
-    modalImg.src = image.src;
-    modalTitle.textContent = image.alt;
+    // Limpiar elementos anteriores
+    modalImg.style.display = "none";
+    modalVideo.style.display = "none";
+    modalVideo.pause(); // Pausar cualquier video anterior
+
+    // Configurar según el tipo de media
+    if (mediaItem.type === "video") {
+      modalVideo.src = mediaItem.src;
+      modalVideo.style.display = "block";
+    } else {
+      modalImg.src = mediaItem.src;
+      modalImg.alt = mediaItem.alt;
+      modalImg.style.display = "block";
+    }
+
+    modalTitle.textContent = mediaItem.alt;
     currentSpan.textContent = index + 1;
     totalSpan.textContent = currentImages.length;
 
@@ -1193,8 +1348,8 @@ function initModernGallery() {
   // ===== INICIALIZACIÓN =====
 
   function init() {
-    // Generar carrusel inicial con todas las imágenes
-    generateCarousel(getAllImages());
+    // Generar carrusel inicial con todos los medios
+    generateCarousel(getAllMedia());
 
     // Inicializar componentes
     initFilters();
